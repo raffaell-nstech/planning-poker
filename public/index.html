@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Planning Poker</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🃏</text></svg>">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Tela inicial: criar sala -->
+  <main id="home" class="screen hidden">
+    <div class="panel">
+      <h1>🃏 Planning Poker</h1>
+      <p class="muted">Crie uma sala e compartilhe o link com o time.</p>
+      <form id="create-form">
+        <label>Nome do jogo
+          <input id="game-name" maxlength="60" placeholder="Sprint 42" autocomplete="off">
+        </label>
+        <label>Baralho
+          <select id="deck"></select>
+        </label>
+        <label class="check">
+          <input type="checkbox" id="only-facilitator">
+          Só o facilitador (quem criou) pode revelar e controlar a rodada
+        </label>
+        <button type="submit" class="primary">Criar sala</button>
+      </form>
+      <form id="join-code-form" class="join-code">
+        <input id="join-code" maxlength="6" placeholder="Código da sala" autocomplete="off">
+        <button type="submit">Entrar</button>
+      </form>
+      <p id="home-error" class="error"></p>
+    </div>
+  </main>
+
+  <!-- Pedir nome -->
+  <main id="name-screen" class="screen hidden">
+    <div class="panel">
+      <h2>Como você quer aparecer?</h2>
+      <form id="name-form">
+        <label>Seu nome
+          <input id="player-name" maxlength="30" required autocomplete="off">
+        </label>
+        <label class="check">
+          <input type="checkbox" id="spectator">
+          Entrar como espectador (assiste sem votar)
+        </label>
+        <button type="submit" class="primary">Entrar na sala</button>
+      </form>
+      <p id="name-error" class="error"></p>
+    </div>
+  </main>
+
+  <!-- Sala -->
+  <div id="room" class="hidden">
+    <header class="topbar">
+      <div class="title">
+        <strong id="room-name"></strong>
+        <span class="code" id="room-code" title="Código da sala"></span>
+      </div>
+      <div class="actions">
+        <button id="copy-link">Copiar convite</button>
+        <button id="toggle-spectator"></button>
+        <button id="toggle-issues">Issues</button>
+      </div>
+    </header>
+
+    <div class="layout">
+      <section class="board">
+        <div id="current-issue" class="current-issue hidden"></div>
+        <div class="players-row" id="players-top"></div>
+        <div class="table">
+          <div id="table-center"></div>
+        </div>
+        <div class="players-row" id="players-bottom"></div>
+
+        <div id="results" class="results hidden"></div>
+        <div id="hand" class="hand"></div>
+        <p id="spectator-note" class="muted center hidden">Você está como espectador.</p>
+      </section>
+
+      <aside id="issues" class="issues hidden">
+        <div class="issues-head">
+          <h3>Issues</h3>
+          <button id="close-issues" class="icon" aria-label="Fechar">✕</button>
+        </div>
+        <form id="issue-form">
+          <input id="issue-title" maxlength="200" placeholder="Título ou nº do card" autocomplete="off">
+          <button type="submit">Adicionar</button>
+        </form>
+        <ul id="issue-list"></ul>
+        <p id="issues-total" class="muted"></p>
+      </aside>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+  <div id="connection" class="connection hidden">Reconectando…</div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

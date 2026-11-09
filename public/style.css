@@ -1,0 +1,316 @@
+:root {
+  --bg: #f4f6fb;
+  --surface: #ffffff;
+  --text: #1d2433;
+  --muted: #6b7489;
+  --border: #dde2ec;
+  --primary: #3b5bdb;
+  --primary-text: #ffffff;
+  --table: #d8e4ff;
+  --card-back: linear-gradient(135deg, #4c6ef5, #364fc7);
+  --selected: #3b5bdb;
+  --danger: #c92a2a;
+  --success: #2b8a3e;
+  --radius: 10px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #12151c;
+    --surface: #1b2029;
+    --text: #e6e9f0;
+    --muted: #9aa3b5;
+    --border: #2c3341;
+    --primary: #5c7cfa;
+    --table: #232c3d;
+    --selected: #748ffc;
+    --danger: #ff6b6b;
+    --success: #51cf66;
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.hidden { display: none !important; }
+.muted { color: var(--muted); }
+.center { text-align: center; }
+.error { color: var(--danger); min-height: 1.2em; margin: 8px 0 0; }
+
+button, input, select {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: 8px;
+  padding: 8px 14px;
+  cursor: pointer;
+}
+button:hover { border-color: var(--primary); }
+button:disabled { opacity: .5; cursor: not-allowed; }
+button.primary {
+  background: var(--primary);
+  color: var(--primary-text);
+  border-color: var(--primary);
+  font-weight: 600;
+}
+button.icon { border: 0; background: none; padding: 4px 8px; }
+
+input, select {
+  width: 100%;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  border-radius: 8px;
+  padding: 9px 11px;
+}
+
+/* --- Telas iniciais --- */
+.screen {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+}
+.panel {
+  width: 100%;
+  max-width: 420px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 28px;
+}
+.panel h1, .panel h2 { margin-top: 0; }
+.panel form { display: grid; gap: 14px; }
+.panel label { display: grid; gap: 6px; font-size: 14px; }
+.panel label.check { display: flex; gap: 8px; align-items: flex-start; }
+.panel label.check input { width: auto; margin-top: 3px; }
+.join-code {
+  display: flex !important;
+  gap: 8px;
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+}
+.join-code input { text-transform: uppercase; }
+
+/* --- Sala --- */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 12px 16px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+.title { display: flex; align-items: center; gap: 10px; }
+.code {
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: 13px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+}
+.actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.layout { display: flex; min-height: calc(100vh - 60px); }
+.board {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  padding: 24px 16px 32px;
+  min-width: 0;
+}
+
+.current-issue {
+  max-width: 640px;
+  text-align: center;
+  font-weight: 600;
+  padding: 8px 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.players-row {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 18px;
+  min-height: 92px;
+  width: 100%;
+  max-width: 760px;
+}
+
+.player {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 76px;
+}
+.player.offline { opacity: .4; }
+.player .name {
+  font-size: 13px;
+  max-width: 76px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: center;
+}
+.player.me .name { font-weight: 700; }
+
+.slot {
+  width: 44px;
+  height: 64px;
+  border-radius: 8px;
+  border: 2px dashed var(--border);
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 18px;
+}
+.slot.voted { border: 0; background: var(--card-back); }
+.slot.shown {
+  border: 2px solid var(--primary);
+  background: var(--surface);
+  color: var(--primary);
+  animation: flip .35s ease;
+}
+.slot.spectator { border: 0; font-size: 22px; }
+
+@keyframes flip {
+  from { transform: rotateY(90deg); }
+  to { transform: rotateY(0); }
+}
+
+.table {
+  width: min(420px, 100%);
+  min-height: 140px;
+  border-radius: 80px;
+  background: var(--table);
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  text-align: center;
+}
+
+/* --- Mão de cartas --- */
+.hand {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  max-width: 760px;
+}
+.card {
+  width: 52px;
+  height: 78px;
+  border-radius: 9px;
+  border: 2px solid var(--primary);
+  background: var(--surface);
+  color: var(--primary);
+  font-size: 19px;
+  font-weight: 700;
+  transition: transform .12s ease;
+}
+.card:hover:not(:disabled) { transform: translateY(-6px); }
+.card.selected {
+  background: var(--selected);
+  color: var(--primary-text);
+  transform: translateY(-10px);
+}
+
+/* --- Resultado --- */
+.results {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px 22px;
+  max-width: 760px;
+}
+.stat { text-align: center; }
+.stat .value { font-size: 30px; font-weight: 700; }
+.stat .label { font-size: 13px; color: var(--muted); }
+.consensus { color: var(--success); font-weight: 700; }
+.bars { display: flex; gap: 12px; align-items: flex-end; }
+.bar { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 13px; }
+.bar .fill { width: 14px; background: var(--primary); border-radius: 4px; }
+.bar .card-label { font-weight: 700; }
+
+/* --- Issues --- */
+.issues {
+  width: 340px;
+  flex-shrink: 0;
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  padding: 16px;
+  overflow-y: auto;
+}
+.issues-head { display: flex; justify-content: space-between; align-items: center; }
+.issues-head h3 { margin: 0; }
+#issue-form { display: flex; gap: 8px; margin: 14px 0; }
+#issue-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.issue {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px 12px;
+  display: grid;
+  gap: 8px;
+}
+.issue.current { border-color: var(--primary); box-shadow: 0 0 0 1px var(--primary); }
+.issue .issue-title { word-break: break-word; }
+.issue .row { display: flex; gap: 8px; align-items: center; }
+.issue .row button { padding: 5px 10px; font-size: 13px; }
+.issue select { width: auto; padding: 4px 8px; font-size: 13px; margin-left: auto; }
+.issue .remove { color: var(--danger); }
+
+@media (max-width: 860px) {
+  .layout { flex-direction: column; }
+  .issues { width: 100%; border-left: 0; border-top: 1px solid var(--border); }
+}
+
+/* --- Avisos --- */
+.toast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--text);
+  color: var(--bg);
+  padding: 10px 16px;
+  border-radius: 8px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s;
+}
+.toast.show { opacity: 1; }
+.connection {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+  background: var(--danger);
+  color: #fff;
+  padding: 6px;
+  font-size: 14px;
+}
